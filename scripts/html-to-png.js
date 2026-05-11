@@ -26,6 +26,11 @@ async function convertAll() {
       // 없으면 → 전체 1장 스크린샷
       const hasSlices = html.includes('data-slice=');
 
+      // 구글 드라이브 폴더 ID 추출
+      const driveMatch = html.match(/data-folder-id="([^"]+)"/);
+      const folderId = driveMatch ? driveMatch[1] : null;
+      const generatedPngs = [];
+
       const fullHtml = wrapHtml(html);
       const page = await browser.newPage();
       await page.setViewport({ width: 850, height: 1 });
@@ -47,6 +52,7 @@ async function convertAll() {
           const pngPath = file.replace('.html', '_' + sliceNum + '.png');
           await slice.screenshot({ path: pngPath, type: 'png', omitBackground: false });
           console.log('  ✅ ' + path.basename(file) + ' → slice ' + sliceNum + '.png');
+          generatedPngs.push(pngPath);
         }
       } else {
         // ── 전체 1장 모드 (sum HTML 등) ──
@@ -57,6 +63,7 @@ async function convertAll() {
       }
 
       await page.close();
+
     } catch (e) {
       console.error('  ❌ ' + file + ': ' + e.message);
     }
