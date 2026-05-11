@@ -1,0 +1,34 @@
+name: 📸 HTML to PNG
+
+on:
+  push:
+    branches: [main]
+    paths: ['performances/**/*.html']
+  workflow_dispatch:  # 수동 실행도 가능
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 📦 Install Puppeteer
+        run: npm install puppeteer
+
+      - name: 📸 Convert HTML → PNG
+        run: node scripts/html-to-png.js
+
+      - name: 📤 Commit & Push PNGs
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: '📸 Auto-generate PNG from HTML'
+          file_pattern: 'performances/**/*.png'
