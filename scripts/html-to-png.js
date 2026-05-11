@@ -12,6 +12,13 @@ async function convertAll() {
 
   if (htmlFiles.length === 0) { console.log('변환할 HTML 없음'); return; }
 
+  // 기존 PNG 삭제 (캐시 찌꺼기 방지)
+  const execSync = require('child_process').execSync;
+  try {
+    if (fs.existsSync(perfDir)) execSync(\`find "\${perfDir}" -name "*.png" -type f -delete\`);
+    if (fs.existsSync(sharedDir)) execSync(\`find "\${sharedDir}" -name "*.png" -type f -delete\`);
+  } catch(e) {}
+
   console.log('📸 총 ' + htmlFiles.length + '개 HTML 변환 시작');
 
   const browser = await puppeteer.launch({
@@ -46,10 +53,10 @@ async function convertAll() {
       fs.writeFileSync(tempPath, fullHtml);
       await page.goto(`file://${tempPath.replace(/\\/g, '/')}`, { waitUntil: 'networkidle0', timeout: 30000 });
 
-      // 폰트 로딩 대기 및 강제 로딩
+      // 폰트 로딩 대기 및 강제 로딩 (에러 무시)
       await page.evaluate(async () => {
         const fontFaces = Array.from(document.fonts.values());
-        await Promise.all(fontFaces.map(f => f.load()));
+        await Promise.all(fontFaces.map(f => f.load().catch(e => console.log('Font load error:', e.message))));
         await document.fonts.ready;
       });
       await new Promise(r => setTimeout(r, 2000)); // 렌더링 안정화 2초 대기
