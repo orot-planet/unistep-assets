@@ -39,7 +39,7 @@ async function convertAll() {
 
       // 폰트 로딩 대기
       await page.evaluate(() => document.fonts.ready);
-      await new Promise(r => setTimeout(r, 1000));
+      await new Promise(r => setTimeout(r, 3000));
 
       // 콘텐츠 높이로 리사이즈
       const bodyHeight = await page.evaluate(() => document.body.scrollHeight);
@@ -80,10 +80,14 @@ function wrapHtml(html) {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=850">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;800&family=Noto+Sans+SC:wght@400;700;800&family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;800;900&family=Noto+Sans+SC:wght@400;700;800;900&family=Inter:wght@400;700;800;900&display=block" rel="stylesheet">
 <style>
-  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * { 
+    margin: 0; padding: 0; box-sizing: border-box; 
+    font-family: 'Pretendard', 'Noto Sans JP', 'Noto Sans SC', 'Inter', sans-serif !important;
+  }
   body { background: white; width: 850px; }
 </style>
 </head><body>${html}</body></html>`;
