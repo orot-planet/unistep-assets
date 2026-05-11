@@ -16,7 +16,13 @@ async function convertAll() {
 
   const browser = await puppeteer.launch({
     headless: 'new',
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    args: [
+      '--no-sandbox', 
+      '--disable-setuid-sandbox',
+      '--font-render-hinting=none',
+      '--disable-font-subpixel-positioning',
+      '--force-color-profile=srgb'
+    ]
   });
 
   for (const file of htmlFiles) {
@@ -37,9 +43,13 @@ async function convertAll() {
       await page.setViewport({ width: 850, height: 1 });
       await page.setContent(fullHtml, { waitUntil: 'networkidle0', timeout: 30000 });
 
-      // 폰트 로딩 대기
-      await page.evaluate(() => document.fonts.ready);
-      await new Promise(r => setTimeout(r, 3000));
+      // 폰트 로딩 대기 및 강제 로딩
+      await page.evaluate(async () => {
+        const fontFaces = Array.from(document.fonts.values());
+        await Promise.all(fontFaces.map(f => f.load()));
+        await document.fonts.ready;
+      });
+      await new Promise(r => setTimeout(r, 2000)); // 렌더링 안정화 2초 대기
 
       // 콘텐츠 높이로 리사이즈
       const bodyHeight = await page.evaluate(() => document.body.scrollHeight);
@@ -82,7 +92,7 @@ function wrapHtml(html) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&family=Noto+Sans+KR:wght@400;700;800;900&family=Noto+Sans+JP:wght@400;700;800;900&family=Noto+Sans+SC:wght@400;700;800;900&display=swap" rel="stylesheet">
 <style>
   * { 
     margin: 0; padding: 0; box-sizing: border-box; 
