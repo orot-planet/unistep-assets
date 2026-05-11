@@ -34,7 +34,10 @@ jobs:
         run: npm install puppeteer pretendard @fontsource/inter @fontsource/noto-sans-kr @fontsource/noto-sans-jp @fontsource/noto-sans-sc @fontsource/noto-color-emoji
 
       - name: 📸 Convert HTML → PNG
-        run: node scripts/html-to-png.js
+        run: |
+          find . -name "*.png" -type f -delete  # 기존에 있던 모든 PNG 파일 완전 삭제 (추가된 줄)
+          node scripts/html-to-png.js
+
 
       - name: 📤 Commit & Push PNGs
         id: auto-commit
