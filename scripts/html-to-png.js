@@ -4,10 +4,11 @@ const path = require('path');
 
 async function convertAll() {
   const perfDir = path.join(__dirname, '..', 'performances');
-  if (!fs.existsSync(perfDir)) { console.log('performances 폴더 없음'); return; }
-
+  const sharedDir = path.join(__dirname, '..', 'shared');
+  
   const htmlFiles = [];
-  findHtmlFiles(perfDir, htmlFiles);
+  if (fs.existsSync(perfDir)) findHtmlFiles(perfDir, htmlFiles);
+  if (fs.existsSync(sharedDir)) findHtmlFiles(sharedDir, htmlFiles);
 
   if (htmlFiles.length === 0) { console.log('변환할 HTML 없음'); return; }
 
