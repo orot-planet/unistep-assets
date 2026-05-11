@@ -48,7 +48,7 @@ jobs:
             COLOR=15158332
           fi
 
-          # PNG 파일 목록 + raw URL 생성
+          # PNG 파일 목록 + raw URL 생성  
           IMG_LINES=""
           for f in $(find performances -name "*.png" -newer scripts/html-to-png.js 2>/dev/null | head -15); do
             IMG_LINES="${IMG_LINES}🖼️ [${f}](${BASE}/${f})\n"
