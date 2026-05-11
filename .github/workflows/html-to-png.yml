@@ -34,7 +34,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: '📸 Auto-generate PNG from HTML'
-          file_pattern: 'performances/**/*.png shared/**/*.png'
+          file_pattern: '.'
 
       - name: 🔔 Discord 알림 (이미지 링크 포함)
         if: always()
@@ -66,4 +66,4 @@ jobs:
 
           curl -H "Content-Type: application/json" \
             -d "{\"embeds\":[{\"title\":\"📸 HTML → PNG 변환 ${STATUS}\",\"description\":\"${IMG_LINES}\",\"color\":${COLOR},\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"${THUMB}}]}" \
-            ${{ secrets.DISCORD_WEBHOOK }}
+            ${
