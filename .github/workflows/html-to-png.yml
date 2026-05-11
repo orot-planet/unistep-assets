@@ -23,6 +23,11 @@ jobs:
         with:
           node-version: 20
 
+      - name: 🔠 Install CJK Fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk
+
       - name: 📦 Install Puppeteer
         run: npm install puppeteer
 
@@ -51,19 +56,3 @@ jobs:
           fi
 
           # PNG 파일 목록 + raw URL 생성
-          IMG_LINES=""
-          for f in $(find performances shared -name "*.png" -newer scripts/html-to-png.js 2>/dev/null | head -15); do
-            IMG_LINES="${IMG_LINES}🖼️ [${f}](${BASE}/${f})\n"
-          done
-          [ -z "$IMG_LINES" ] && IMG_LINES="변환된 파일 없음"
-
-          # 첫 번째 PNG를 썸네일로 표시
-          FIRST_PNG=$(find performances shared -name "*.png" -newer scripts/html-to-png.js 2>/dev/null | head -1)
-          THUMB=""
-          if [ -n "$FIRST_PNG" ]; then
-            THUMB=",\"image\":{\"url\":\"${BASE}/${FIRST_PNG}\"}"
-          fi
-
-          curl -H "Content-Type: application/json" \
-            -d "{\"embeds\":[{\"title\":\"📸 HTML → PNG 변환 ${STATUS}\",\"description\":\"${IMG_LINES}\",\"color\":${COLOR},\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"${THUMB}}]}" \
-            ${
