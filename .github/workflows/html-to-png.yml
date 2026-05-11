@@ -30,8 +30,8 @@ jobs:
           sudo fc-cache -f -v
 
 
-      - name: 📦 Install Puppeteer
-        run: npm install puppeteer
+      - name: 📦 Install Puppeteer & Local Fonts
+        run: npm install puppeteer pretendard @fontsource/inter @fontsource/noto-sans-kr @fontsource/noto-sans-jp @fontsource/noto-sans-sc @fontsource/noto-color-emoji
 
       - name: 📸 Convert HTML → PNG
         run: node scripts/html-to-png.js
