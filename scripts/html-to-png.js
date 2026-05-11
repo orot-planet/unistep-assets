@@ -41,7 +41,10 @@ async function convertAll() {
       const fullHtml = wrapHtml(html);
       const page = await browser.newPage();
       await page.setViewport({ width: 850, height: 1 });
-      await page.setContent(fullHtml, { waitUntil: 'networkidle0', timeout: 30000 });
+      
+      const tempPath = path.join(__dirname, '..', 'temp_render.html');
+      fs.writeFileSync(tempPath, fullHtml);
+      await page.goto(\`file://\${tempPath.replace(/\\\\/g, '/')}\`, { waitUntil: 'networkidle0', timeout: 30000 });
 
       // 폰트 로딩 대기 및 강제 로딩
       await page.evaluate(async () => {
@@ -85,22 +88,28 @@ async function convertAll() {
 }
 
 function wrapHtml(html) {
-  return `<!DOCTYPE html>
+  const cssLinks = [
+    \`file://\${path.resolve(__dirname, '../node_modules/pretendard/dist/web/static/pretendard.css')}\`,
+    \`file://\${path.resolve(__dirname, '../node_modules/@fontsource/inter/index.css')}\`,
+    \`file://\${path.resolve(__dirname, '../node_modules/@fontsource/noto-sans-kr/index.css')}\`,
+    \`file://\${path.resolve(__dirname, '../node_modules/@fontsource/noto-sans-jp/index.css')}\`,
+    \`file://\${path.resolve(__dirname, '../node_modules/@fontsource/noto-sans-sc/index.css')}\`,
+    \`file://\${path.resolve(__dirname, '../node_modules/@fontsource/noto-color-emoji/index.css')}\`
+  ].map(url => \`<link rel="stylesheet" href="\${url}">\`).join('\n');
+
+  return \`<!DOCTYPE html>
 <html><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=850">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&family=Noto+Sans+KR:wght@400;700;800;900&family=Noto+Sans+JP:wght@400;700;800;900&family=Noto+Sans+SC:wght@400;700;800;900&display=swap" rel="stylesheet">
+\${cssLinks}
 <style>
   * { 
     margin: 0; padding: 0; box-sizing: border-box; 
-    font-family: 'Pretendard', 'Noto Sans CJK KR', 'Noto Sans CJK JP', 'Noto Sans CJK SC', 'Noto Sans KR', 'Noto Sans JP', 'Noto Sans SC', 'NanumGothic', 'Inter', 'Noto Color Emoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Symbola', sans-serif !important;
+    font-family: 'Pretendard', 'Noto Sans KR', 'Noto Sans JP', 'Noto Sans SC', 'Inter', 'Noto Color Emoji', sans-serif !important;
   }
   body { background: white; width: 850px; }
 </style>
-</head><body>${html}</body></html>`;
+</head><body>\${html}</body></html>\`;
 }
 
 function findHtmlFiles(dir, result) {
