@@ -29,7 +29,11 @@ async function convertAll() {
       const fullHtml = wrapHtml(html);
       const page = await browser.newPage();
       await page.setViewport({ width: 850, height: 1 });
-      await page.setContent(fullHtml, { waitUntil: 'networkidle0', timeout: 20000 });
+      await page.setContent(fullHtml, { waitUntil: 'networkidle0', timeout: 30000 });
+
+      // 폰트 로딩 대기
+      await page.evaluate(() => document.fonts.ready);
+      await new Promise(r => setTimeout(r, 1000));
 
       // 콘텐츠 높이로 리사이즈
       const bodyHeight = await page.evaluate(() => document.body.scrollHeight);
