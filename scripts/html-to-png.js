@@ -82,11 +82,11 @@ function wrapHtml(html) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;800;900&family=Noto+Sans+SC:wght@400;700;800;900&family=Inter:wght@400;700;800;900&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=block" rel="stylesheet">
 <style>
   * { 
     margin: 0; padding: 0; box-sizing: border-box; 
-    font-family: 'Pretendard', 'Noto Sans JP', 'Noto Sans SC', 'Inter', sans-serif !important;
+    font-family: 'Pretendard', 'Noto Sans CJK KR', 'Noto Sans CJK JP', 'Noto Sans CJK SC', 'Noto Sans KR', 'Noto Sans JP', 'Noto Sans SC', 'NanumGothic', 'Inter', 'Noto Color Emoji', 'Apple Color Emoji', 'Segoe UI Emoji', 'Symbola', sans-serif !important;
   }
   body { background: white; width: 850px; }
 </style>
