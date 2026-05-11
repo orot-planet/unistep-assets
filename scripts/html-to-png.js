@@ -44,7 +44,7 @@ async function convertAll() {
       
       const tempPath = path.join(__dirname, '..', 'temp_render.html');
       fs.writeFileSync(tempPath, fullHtml);
-      await page.goto(\`file://\${tempPath.replace(/\\\\/g, '/')}\`, { waitUntil: 'networkidle0', timeout: 30000 });
+      await page.goto(`file://${tempPath.replace(/\\/g, '/')}`, { waitUntil: 'networkidle0', timeout: 30000 });
 
       // 폰트 로딩 대기 및 강제 로딩
       await page.evaluate(async () => {
@@ -89,19 +89,19 @@ async function convertAll() {
 
 function wrapHtml(html) {
   const cssLinks = [
-    \`file://\${path.resolve(__dirname, '../node_modules/pretendard/dist/web/static/pretendard.css')}\`,
-    \`file://\${path.resolve(__dirname, '../node_modules/@fontsource/inter/index.css')}\`,
-    \`file://\${path.resolve(__dirname, '../node_modules/@fontsource/noto-sans-kr/index.css')}\`,
-    \`file://\${path.resolve(__dirname, '../node_modules/@fontsource/noto-sans-jp/index.css')}\`,
-    \`file://\${path.resolve(__dirname, '../node_modules/@fontsource/noto-sans-sc/index.css')}\`,
-    \`file://\${path.resolve(__dirname, '../node_modules/@fontsource/noto-color-emoji/index.css')}\`
-  ].map(url => \`<link rel="stylesheet" href="\${url}">\`).join('\n');
+    `file://${path.resolve(__dirname, '../node_modules/pretendard/dist/web/static/pretendard.css')}`,
+    `file://${path.resolve(__dirname, '../node_modules/@fontsource/inter/index.css')}`,
+    `file://${path.resolve(__dirname, '../node_modules/@fontsource/noto-sans-kr/index.css')}`,
+    `file://${path.resolve(__dirname, '../node_modules/@fontsource/noto-sans-jp/index.css')}`,
+    `file://${path.resolve(__dirname, '../node_modules/@fontsource/noto-sans-sc/index.css')}`,
+    `file://${path.resolve(__dirname, '../node_modules/@fontsource/noto-color-emoji/index.css')}`
+  ].map(url => `<link rel="stylesheet" href="${url}">`).join('\n');
 
-  return \`<!DOCTYPE html>
+  return `<!DOCTYPE html>
 <html><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=850">
-\${cssLinks}
+${cssLinks}
 <style>
   * { 
     margin: 0; padding: 0; box-sizing: border-box; 
@@ -109,7 +109,7 @@ function wrapHtml(html) {
   }
   body { background: white; width: 850px; }
 </style>
-</head><body>\${html}</body></html>\`;
+</head><body>${html}</body></html>`;
 }
 
 function findHtmlFiles(dir, result) {
