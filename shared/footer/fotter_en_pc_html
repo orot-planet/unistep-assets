@@ -1,0 +1,306 @@
+<div
+  style="width:100%;background:#050505;color:#fff;font-family:Pretendard,-apple-system,sans-serif;line-height:1.8;word-break:keep-all;overflow:hidden;box-sizing:border-box;letter-spacing:0.08em;">
+  <!-- 9. FAQ -->
+  <div data-slice="1" style="padding:100px 24px;text-align:center;">
+    <div style="max-width:850px;margin:0 auto;">
+
+      <p
+        style="font-size:14px;font-weight:700;letter-spacing:6px;color:#D4AF6E;margin-bottom:20px;text-transform:uppercase;">
+        F A Q</p>
+
+      <h2 style="font-size:clamp(28px, 6vw, 42px);font-weight:900;line-height:1.4;margin-bottom:60px;color:#fff;">
+        Frequently Asked Questions</h2>
+      <div style="display:flex;flex-direction:column;gap:20px;text-align:left;">
+        <div
+          style="background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:clamp(24px, 5vw, 40px);">
+          <div style="display:flex;gap:16px;margin-bottom:20px;"><span
+              style="font-size:24px;font-weight:900;color:#D4AF6E;line-height:1.4;">Q.</span>
+
+            <h3 style="font-size:clamp(17px, 4vw, 22px);font-weight:800;color:#fff;margin:0;line-height:1.5;">Why is
+              device usage restricted for latecomers?</h3>
+          </div>
+          <div style="display:flex;gap:16px;"><span
+              style="font-size:24px;font-weight:900;color:rgba(255,255,255,0.2);line-height:1.5;">A.</span>
+            <div style="font-size:clamp(15px, 3.5vw, 17px);color:rgba(255,255,255,0.7);line-height:2;margin:0;">Setting
+              up devices in a dark auditorium
+              <br><strong style="color:#ff6b6b;">can disturb other audience members.</strong>
+              <br>
+              <br>However, for shows with an intermission,
+              <br><strong style="color:#fff;">you will be guided to a seat with set up subtitles before Act 2
+                begins.</strong>
+              <br>
+              <br><span
+                style="display:inline-block;padding:6px 12px;border:1px solid rgba(255,107,107,0.3);color:#ff6b6b;border-radius:6px;font-size:14px;font-weight:700;line-height:1.6;">&nbsp;※
+                No same-day refunds will be given due to late entry, so please arrive with plenty of time.&nbsp;</span>
+            </div>
+          </div>
+        </div>
+        <div
+          style="background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:16px;padding:clamp(24px, 5vw, 40px);">
+          <div style="display:flex;gap:16px;margin-bottom:20px;"><span
+              style="font-size:24px;font-weight:900;color:#D4AF6E;line-height:1.4;">Q.</span>
+
+            <h3 style="font-size:clamp(17px, 4vw, 22px);font-weight:800;color:#fff;margin:0;line-height:1.5;">Are
+              actors&#39; ad-libs translated in real-time?</h3>
+          </div>
+          <div style="display:flex;gap:16px;"><span
+              style="font-size:24px;font-weight:900;color:rgba(255,255,255,0.2);line-height:1.5;">A.</span>
+
+            <p style="font-size:clamp(15px, 3.5vw, 17px);color:rgba(255,255,255,0.7);line-height:2;margin:0;">Unexpected
+              ad-libs on the day of the show are difficult to handle immediately.
+              <br>
+              <br>However, UNISTEP <strong style="color:#fff;">continuously updates translations</strong> to maintain
+              top quality so audiences don&#39;t miss the context and emotion.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 10. 안심 결제 -->
+  <div data-slice="2" style="padding:100px 24px;text-align:center;">
+    <div style="max-width:850px;margin:0 auto;">
+
+      <p
+        style="font-size:14px;font-weight:700;letter-spacing:6px;color:#D4AF6E;margin-bottom:20px;text-transform:uppercase;">
+        Safe &amp; Easy</p>
+
+      <h2 style="font-size:clamp(28px, 6vw, 42px);font-weight:900;line-height:1.4;margin-bottom:60px;color:#fff;">Safe
+        Payment &amp; Refund</h2>
+      <div
+        style="border:1px solid rgba(212,175,110,0.4);border-radius:16px;padding:clamp(30px, 5vw, 50px) 24px;margin-bottom:80px;text-align:center;">
+
+        <h3
+          style="font-size:clamp(20px, 4.5vw, 24px);font-weight:800;color:#D4AF6E;margin-bottom:20px;line-height:1.4;">
+          Global Credit Card Support</h3>
+
+        <p style="font-size:clamp(15px, 3.5vw, 17px);color:rgba(255,255,255,0.8);line-height:2;margin:0;">We support
+          various global payment methods such as <strong style="color:#fff;">Visa, Mastercard, and JCB</strong>.
+          <br>Pay easily without complicated sign-up procedures.
+        </p>
+      </div>
+      <div style="text-align:center;">
+
+        <h3 style="font-size:clamp(22px, 5vw, 26px);font-weight:800;color:#fff;margin-bottom:16px;">Cancellation &amp;
+          Refund Policy</h3>
+
+        <p style="font-size:clamp(14px, 3vw, 16px);color:rgba(255,255,255,0.6);margin-bottom:40px;line-height:1.8;">
+          Refunds are available up to 24 hours before the show,
+          <br>with a small fee depending on the cancellation time.
+        </p>
+        <div style="width:100%;overflow-x:auto;">
+
+          <table style="width:100%;border-collapse:collapse;text-align:center;font-size:clamp(13px, 3vw, 15px);">
+            <thead>
+              <tr>
+                <th
+                  style="padding:16px 8px;font-weight:800;border-top:2px solid #D4AF6E;border-bottom:1px solid #D4AF6E;color:#D4AF6E;width:60%;word-break:keep-all;">
+                  Cancellation Date</th>
+                <th
+                  style="padding:16px 8px;font-weight:800;border-top:2px solid #D4AF6E;border-bottom:1px solid #D4AF6E;color:#D4AF6E;width:40%;word-break:keep-all;">
+                  Cancellation Fee</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td
+                  style="padding:20px 8px;color:#fff;border-bottom:1px solid rgba(255,255,255,0.1);word-break:keep-all;">
+                  Within 7 days of booking</td>
+                <td
+                  style="padding:20px 8px;color:#D4AF6E;font-weight:700;border-bottom:1px solid rgba(255,255,255,0.1);">
+                  None</td>
+              </tr>
+              <tr>
+                <td
+                  style="padding:20px 8px;color:rgba(255,255,255,0.7);border-bottom:1px solid rgba(255,255,255,0.1);word-break:keep-all;">
+                  8 days after booking ~ 10 days before show</td>
+                <td
+                  style="padding:20px 8px;color:#fff;border-bottom:1px solid rgba(255,255,255,0.1);word-break:keep-all;">
+                  4,000 KRW per ticket</td>
+              </tr>
+              <tr>
+                <td
+                  style="padding:20px 8px;color:rgba(255,255,255,0.7);border-bottom:1px solid rgba(255,255,255,0.1);word-break:keep-all;">
+                  9 to 7 days before the show</td>
+                <td
+                  style="padding:20px 8px;color:#fff;border-bottom:1px solid rgba(255,255,255,0.1);word-break:keep-all;">
+                  10% of ticket price</td>
+              </tr>
+              <tr>
+                <td
+                  style="padding:20px 8px;color:rgba(255,255,255,0.7);border-bottom:1px solid rgba(255,255,255,0.1);word-break:keep-all;">
+                  6 to 3 days before the show</td>
+                <td
+                  style="padding:20px 8px;color:#fff;border-bottom:1px solid rgba(255,255,255,0.1);word-break:keep-all;">
+                  20% of ticket price</td>
+              </tr>
+              <tr>
+                <td
+                  style="padding:20px 8px;color:rgba(255,255,255,0.7);border-bottom:1px solid #D4AF6E;word-break:keep-all;">
+                  2 to 1 day before the show</td>
+                <td style="padding:20px 8px;color:#fff;border-bottom:1px solid #D4AF6E;word-break:keep-all;">30% of
+                  ticket price</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 11. 관람 여정 프로세스 -->
+  <div data-slice="3" style="padding:100px 24px;text-align:center;">
+    <div style="max-width:750px;margin:0 auto;">
+
+      <p
+        style="font-size:14px;font-weight:700;letter-spacing:6px;color:#D4AF6E;margin-bottom:20px;text-transform:uppercase;">
+        How to use</p>
+
+      <h2 style="font-size:clamp(28px, 6vw, 38px);font-weight:900;line-height:1.4;margin-bottom:12px;color:#fff;">How to
+        Use UNISTEP</h2>
+
+      <p style="font-size:clamp(14px, 3.5vw, 16px);color:rgba(255,255,255,.4);margin-bottom:40px;">Here is the process
+        from booking to the start of the show.</p>
+      <div style="position:relative;text-align:left;padding-left:clamp(30px, 6vw, 40px);">
+        <div style="position:absolute;top:10px;bottom:10px;left:0;width:1px;background:rgba(212,175,110,0.3);">
+          <br>
+        </div>
+        <!-- Step 1 -->
+        <div style="position:relative;margin-bottom:70px;">
+          <div
+            style="position:absolute;left:clamp(-39px, -6vw, -49px);top:0;width:18px;height:18px;border-radius:50%;border:2px solid #D4AF6E;background:#050505;display:flex;align-items:center;justify-content:center;">
+            <div style="width:6px;height:6px;background:#D4AF6E;border-radius:50%;">
+              <br>
+            </div>
+          </div>
+
+          <h3 style="font-size:clamp(18px, 4vw, 20px);font-weight:800;color:#fff;margin:0 0 16px 0;line-height:1.4;">1.
+            Service Booking</h3>
+
+          <p style="font-size:clamp(14px, 3.5vw, 16px);color:rgba(255,255,255,0.6);line-height:1.9;margin:0;">After
+            completing payment, a <strong style="color:#D4AF6E;">&#39;Ticket Voucher&#39;</strong> will be sent to your
+            email within <strong style="color:#fff;">1 hour</strong>.</p>
+          <div style="margin-top:14px;border-left:2px solid rgba(212,175,110,0.5);padding-left:12px;">
+
+            <p style="font-size:clamp(13px, 3vw, 14px);color:#D4AF6E;margin:0;">Capturing the voucher in advance speeds
+              up on-site verification.</p>
+          </div>
+        </div>
+        <!-- Step 2 -->
+        <div style="position:relative;margin-bottom:70px;">
+          <div
+            style="position:absolute;left:clamp(-39px, -6vw, -49px);top:0;width:18px;height:18px;border-radius:50%;border:2px solid #D4AF6E;background:#050505;display:flex;align-items:center;justify-content:center;">
+            <div style="width:6px;height:6px;background:#D4AF6E;border-radius:50%;">
+              <br>
+            </div>
+          </div>
+
+          <h3
+            style="font-size:clamp(18px, 4vw, 20px);font-weight:800;color:#fff;margin:0 0 16px 0;display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+            2. Arrive at the Theater&nbsp;<span
+              style="font-size:12px;font-weight:400;color:#D4AF6E;border:1px solid rgba(212,175,110,.4);border-radius:100px;padding:2px 10px;">Day
+              of Show</span></h3>
+
+          <p style="font-size:clamp(14px, 3.5vw, 16px);color:rgba(255,255,255,.6);line-height:1.9;margin:0;">Please
+            arrive at least <strong style="color:#fff;">30 minutes before the show</strong> to receive your ticket and
+            set up your device.</p>
+        </div>
+        <!-- Step 3 -->
+        <div style="position:relative;margin-bottom:70px;">
+          <div
+            style="position:absolute;left:clamp(-39px, -6vw, -49px);top:0;width:18px;height:18px;border-radius:50%;border:2px solid #D4AF6E;background:#050505;display:flex;align-items:center;justify-content:center;">
+            <div style="width:6px;height:6px;background:#D4AF6E;border-radius:50%;">
+              <br>
+            </div>
+          </div>
+
+          <h3 style="font-size:clamp(18px, 4vw, 20px);font-weight:800;color:#fff;margin:0 0 16px 0;">3. Pick up Physical
+            Ticket</h3>
+
+          <p style="font-size:clamp(14px, 3.5vw, 16px);color:rgba(255,255,255,.6);line-height:1.9;margin:0;">Present
+            your <strong style="color:#D4AF6E;">voucher</strong> at the box office and receive your paper ticket.</p>
+        </div>
+        <!-- Step 4 -->
+        <div style="position:relative;margin-bottom:70px;">
+          <div
+            style="position:absolute;left:clamp(-39px, -6vw, -49px);top:0;width:18px;height:18px;border-radius:50%;border:2px solid #D4AF6E;background:#050505;display:flex;align-items:center;justify-content:center;">
+            <div style="width:6px;height:6px;background:#D4AF6E;border-radius:50%;">
+              <br>
+            </div>
+          </div>
+
+          <h3
+            style="font-size:clamp(18px, 4vw, 20px);font-weight:800;color:#fff;margin:0 0 16px 0;display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+            4. Seating &amp; Setup&nbsp;<span
+              style="font-size:12px;font-weight:400;color:#ff8585;border:1px solid rgba(255,107,107,.4);border-radius:100px;padding:2px 10px;">15
+              min prior req.</span></h3>
+
+          <p style="font-size:clamp(14px, 3.5vw, 16px);color:rgba(255,255,255,.6);line-height:1.9;margin:0;">Once
+            seated, UNISTEP staff &#39;uni&#39; will assist you with <strong style="color:#D4AF6E;">device angle
+              adjustment and setup</strong>.</p>
+        </div>
+        <!-- Step 5 -->
+        <div style="position:relative;">
+          <div
+            style="position:absolute;left:clamp(-39px, -6vw, -49px);top:0;width:18px;height:18px;border-radius:50%;border:2px solid #D4AF6E;background:#D4AF6E;">
+            <br>
+          </div>
+
+          <h3 style="font-size:clamp(18px, 4vw, 20px);font-weight:800;color:#D4AF6E;margin:0 0 16px 0;">5. Enjoy the
+            Show</h3>
+
+          <p style="font-size:clamp(14px, 3.5vw, 16px);color:rgba(255,255,255,.8);line-height:1.9;margin:0;">All setup
+            is complete.
+            <br><strong style="color:#fff;">Fully focus on the warmth of the stage!</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 12. 고객 지원 및 SNS -->
+  <div data-slice="4" style="padding:100px 24px 140px;text-align:center;">
+    <div style="max-width:850px;margin:0 auto;">
+
+      <h2 style="font-size:clamp(24px, 5vw, 30px);font-weight:800;color:#fff;margin-bottom:20px;">Customer Center &amp;
+        SNS</h2>
+
+      <p style="font-size:clamp(14px, 3.5vw, 16px);color:rgba(255,255,255,0.6);margin-bottom:60px;line-height:1.8;">If
+        you need help or want to hear new show updates first,
+        <br>contact us below.
+      </p>
+      <div style="display:flex;justify-content:center;gap:clamp(12px, 3vw, 20px);flex-wrap:wrap;">
+        <a href="https://orot-bf.channel.io/workflows/762958"
+          style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:12px;transition:opacity 0.3s;"
+          target="_blank">
+          <div
+            style="width:clamp(55px, 12vw, 70px);height:clamp(55px, 12vw, 70px);border-radius:50%;border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:24px;">🎧</span></div><span
+            style="font-size:12px;color:rgba(255,255,255,0.7);">Customer Center</span>
+        </a>
+        <a href="https://www.instagram.com/orot_unistep"
+          style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:12px;transition:opacity 0.3s;"
+          target="_blank">
+          <div
+            style="width:clamp(55px, 12vw, 70px);height:clamp(55px, 12vw, 70px);border-radius:50%;border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:24px;">📷</span></div><span
+            style="font-size:12px;color:rgba(255,255,255,0.7);">Instagram</span>
+        </a>
+        <a href="https://x.com/unistep_musical"
+          style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:12px;transition:opacity 0.3s;"
+          target="_blank">
+          <div
+            style="width:clamp(55px, 12vw, 70px);height:clamp(55px, 12vw, 70px);border-radius:50%;border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:24px;">𝕏</span></div><span style="font-size:12px;color:rgba(255,255,255,0.7);">X
+            (Twitter)</span>
+        </a>
+        <a href="https://xhslink.com/m/11rvboFJ9td"
+          style="text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:12px;transition:opacity 0.3s;"
+          target="_blank">
+          <div
+            style="width:clamp(55px, 12vw, 70px);height:clamp(55px, 12vw, 70px);border-radius:50%;border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:24px;">📕</span></div><span
+            style="font-size:12px;color:rgba(255,255,255,0.7);">Xiaohongshu</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
