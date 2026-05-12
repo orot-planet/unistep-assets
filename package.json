@@ -6,6 +6,7 @@
     "@fontsource/noto-sans-kr": "^5.2.9",
     "@fontsource/noto-sans-sc": "^5.2.9",
     "pretendard": "^1.3.9",
-    "puppeteer": "^24.43.1"
+    "puppeteer": "^24.43.1",
+    "puppeteer-core": "^24.43.1"
   }
 }
