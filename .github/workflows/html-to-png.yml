@@ -11,12 +11,24 @@ on:
 jobs:
   convert:
     runs-on: ubuntu-latest
+    concurrency:
+      group: html-to-png
+      cancel-in-progress: true
     permissions:
       contents: write
 
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: 🔄 Pull latest (충돌 방지)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin main || true
 
       - name: 🟢 Setup Node.js
         uses: actions/setup-node@v4
@@ -45,8 +57,9 @@ jobs:
         with:
           commit_message: '📸 Auto-generate PNG from HTML'
           file_pattern: '.'
+          push_options: '--force'
 
-      - name: 🔔 Discord 알림 (이미지 링크 포함)
+      - name: 🔔 Discord 알림 (이미지 임베드)
         if: always()
         run: |
           REPO="${{ github.repository }}"
@@ -60,20 +73,21 @@ jobs:
             COLOR=15158332
           fi
 
-          # PNG 파일 목록 + raw URL 생성
-          IMG_LINES=""
-          for f in $(find performances shared -name "*.png" 2>/dev/null | head -15); do
-            IMG_LINES="${IMG_LINES}🖼️ [${f}](${BASE}/${f})\n"
-          done
-          [ -z "$IMG_LINES" ] && IMG_LINES="변환된 파일 없음"
+          # 변환된 PNG 파일 목록 (최대 4개 이미지 임베드)
+          PNGS=$(find performances shared -name "*.png" 2>/dev/null | head -4)
+          PNG_COUNT=$(find performances shared -name "*.png" 2>/dev/null | wc -l)
 
-          # 첫 번째 PNG를 썸네일로 표시
-          FIRST_PNG=$(find performances shared -name "*.png" 2>/dev/null | head -1)
-          THUMB=""
-          if [ -n "$FIRST_PNG" ]; then
-            THUMB=",\"image\":{\"url\":\"${BASE}/${FIRST_PNG}\"}"
-          fi
+          # 첫 번째 임베드 (제목 + 개수)
+          EMBEDS="[{\"title\":\"📸 HTML → PNG 변환 ${STATUS}\",\"description\":\"총 **${PNG_COUNT}개** PNG 생성됨\",\"color\":${COLOR},\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}"
+
+          # 나머지 PNG 이미지 임베드 (최대 4개)
+          for f in $PNGS; do
+            URL="${BASE}/${f}"
+            EMBEDS="${EMBEDS},{\"image\":{\"url\":\"${URL}\"},\"color\":${COLOR}}"
+          done
+
+          EMBEDS="${EMBEDS}]"
 
           curl -H "Content-Type: application/json" \
-            -d "{\"embeds\":[{\"title\":\"📸 HTML → PNG 변환 ${STATUS}\",\"description\":\"${IMG_LINES}\",\"color\":${COLOR},\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"${THUMB}}]}" \
+            -d "{\"embeds\":${EMBEDS}}" \
             ${{ secrets.DISCORD_WEBHOOK }}
