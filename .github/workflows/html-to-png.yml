@@ -23,21 +23,21 @@ jobs:
         with:
           node-version: 20
 
-      - name: 🔠 Install CJK Fonts
+      - name: 🔠 Install CJK Fonts & Chromium
         run: |
           sudo apt-get update
-          sudo apt-get install -y fonts-noto-cjk fonts-noto-color-emoji fonts-noto-core fonts-symbola fonts-nanum fonts-ipafont-gothic fonts-wqy-zenhei
+          sudo apt-get install -y fonts-noto-cjk fonts-noto-color-emoji fonts-noto-core fonts-symbola fonts-nanum fonts-ipafont-gothic fonts-wqy-zenhei chromium-browser
           sudo fc-cache -f -v
 
-
-      - name: 📦 Install Puppeteer & Local Fonts
-        run: npm install puppeteer pretendard @fontsource/inter @fontsource/noto-sans-kr @fontsource/noto-sans-jp @fontsource/noto-sans-sc @fontsource/noto-color-emoji
+      - name: 📦 Install Puppeteer
+        run: npm install puppeteer-core
 
       - name: 📸 Convert HTML → PNG
+        env:
+          PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser
         run: |
-          find . -name "*.png" -type f -delete  # 기존에 있던 모든 PNG 파일 완전 삭제 (추가된 줄)
+          find . -name "*.png" -type f -delete
           node scripts/html-to-png.js
-
 
       - name: 📤 Commit & Push PNGs
         id: auto-commit
@@ -62,13 +62,13 @@ jobs:
 
           # PNG 파일 목록 + raw URL 생성
           IMG_LINES=""
-          for f in $(find performances shared -name "*.png" -newer scripts/html-to-png.js 2>/dev/null | head -15); do
+          for f in $(find performances shared -name "*.png" 2>/dev/null | head -15); do
             IMG_LINES="${IMG_LINES}🖼️ [${f}](${BASE}/${f})\n"
           done
           [ -z "$IMG_LINES" ] && IMG_LINES="변환된 파일 없음"
 
           # 첫 번째 PNG를 썸네일로 표시
-          FIRST_PNG=$(find performances shared -name "*.png" -newer scripts/html-to-png.js 2>/dev/null | head -1)
+          FIRST_PNG=$(find performances shared -name "*.png" 2>/dev/null | head -1)
           THUMB=""
           if [ -n "$FIRST_PNG" ]; then
             THUMB=",\"image\":{\"url\":\"${BASE}/${FIRST_PNG}\"}"
