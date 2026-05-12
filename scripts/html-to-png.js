@@ -35,18 +35,37 @@ async function convertAll() {
   const perfDir = path.join(rootDir, 'performances');
   const sharedDir = path.join(rootDir, 'shared');
 
-  const htmlFiles = [];
-  findHtmlFiles(perfDir, htmlFiles);
-  findHtmlFiles(sharedDir, htmlFiles);
+  var htmlFiles = [];
 
-  if (htmlFiles.length === 0) {
-    console.log('변환할 HTML 없음');
-    console.log('performances 존재: ' + fs.existsSync(perfDir));
-    console.log('shared 존재:       ' + fs.existsSync(sharedDir));
-    return;
+  // ── TARGET 모드: 변경된 파일만 변환 (AppScript push 시) ──
+  var targetEnv = process.env.TARGET_HTML_FILES || '';
+  if (targetEnv.trim()) {
+    var targets = targetEnv.split('\n').map(function(f) { return f.trim(); }).filter(Boolean);
+    targets.forEach(function(relPath) {
+      var abs = path.join(rootDir, relPath);
+      if (fs.existsSync(abs)) {
+        htmlFiles.push(abs);
+        // 기존 PNG만 삭제 (해당 파일 기준)
+        var dir = path.dirname(abs);
+        var base = path.basename(abs, '.html');
+        fs.readdirSync(dir).forEach(function(f) {
+          if (f.startsWith(base) && f.endsWith('.png')) {
+            fs.unlinkSync(path.join(dir, f));
+            console.log('🗑️ 삭제: ' + f);
+          }
+        });
+      } else {
+        console.log('⚠️ 파일 없음: ' + relPath);
+      }
+    });
+    console.log('🎯 타겟 변환 모드: ' + htmlFiles.length + '개 파일');
+  } else {
+    // ── 전체 모드: workflow_dispatch 또는 수동 실행 ──
+    findHtmlFiles(perfDir, htmlFiles);
+    findHtmlFiles(sharedDir, htmlFiles);
+    console.log('🌐 전체 변환 모드: ' + htmlFiles.length + '개 파일');
   }
 
-  console.log('📸 총 ' + htmlFiles.length + '개 HTML 변환 시작');
 
   const browser = await puppeteer.launch({
     headless: 'new',
