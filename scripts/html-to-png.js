@@ -69,7 +69,7 @@ async function convertAll() {
 
       var fullHtml = wrapHtml(html);
       var page = await browser.newPage();
-      await page.setViewport({ width: 850, height: 1 });
+      await page.setViewport({ width: 850, height: 1, deviceScaleFactor: 2 });
       await page.setContent(fullHtml, { waitUntil: 'networkidle0', timeout: 30000 });
 
       // 폰트 로딩 대기
@@ -79,7 +79,7 @@ async function convertAll() {
       await new Promise(function(r) { setTimeout(r, 2000); });
 
       var bodyHeight = await page.evaluate(function() { return document.body.scrollHeight; });
-      await page.setViewport({ width: 850, height: bodyHeight + 50 });
+      await page.setViewport({ width: 850, height: bodyHeight + 50, deviceScaleFactor: 2 });
 
       if (hasSlices) {
         var slices = await page.$$('[data-slice]');
