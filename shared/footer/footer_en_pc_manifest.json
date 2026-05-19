@@ -1,0 +1,15 @@
+{
+  "source": "footer_en_pc.html",
+  "generated": "2026-05-19T02:02:08.016Z",
+  "totalAssets": 1,
+  "assets": [
+    {
+      "order": 1,
+      "type": "png",
+      "filename": "footer_en_pc.png",
+      "sliceNum": "1",
+      "hasGif": false,
+      "sourceUrl": null
+    }
+  ]
+}
