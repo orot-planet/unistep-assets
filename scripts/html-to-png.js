@@ -37,7 +37,6 @@ function downloadFile(url, destPath) {
   return new Promise(function(resolve, reject) {
     var mod = url.startsWith('https') ? https : http;
     mod.get(url, function(response) {
-      // 리다이렉트 처리
       if (response.statusCode === 301 || response.statusCode === 302) {
         return downloadFile(response.headers.location, destPath).then(resolve).catch(reject);
       }
@@ -70,7 +69,7 @@ async function convertAll() {
 
   var htmlFiles = [];
 
-  // ── TARGET 모드: 변경된 파일만 변환 (AppScript push 시) ──
+  // ── TARGET 모드 ──
   var targetEnv = process.env.TARGET_HTML_FILES || '';
   if (targetEnv.trim()) {
     var targets = targetEnv.split('\n').map(function(f) { return f.trim(); }).filter(Boolean);
@@ -78,11 +77,10 @@ async function convertAll() {
       var abs = path.join(rootDir, relPath);
       if (fs.existsSync(abs)) {
         htmlFiles.push(abs);
-        // 기존 PNG/GIF 삭제 (해당 파일 기준)
         var dir = path.dirname(abs);
         var base = path.basename(abs, '.html');
         fs.readdirSync(dir).forEach(function(f) {
-          if (f.startsWith(base) && (f.endsWith('.png') || f.match(/_\d+_gif\d+\.gif$/))) {
+          if (f.startsWith(base) && (f.endsWith('.png') || f.match(/_gif\d+\.gif$/))) {
             fs.unlinkSync(path.join(dir, f));
             console.log('🗑️ 삭제: ' + f);
           }
@@ -93,12 +91,11 @@ async function convertAll() {
     });
     console.log('🎯 타겟 변환 모드: ' + htmlFiles.length + '개 파일');
   } else {
-    // ── 전체 모드: workflow_dispatch 또는 수동 실행 ──
+    // ── 전체 모드 ──
     findHtmlFiles(perfDir, htmlFiles);
     findHtmlFiles(sharedDir, htmlFiles);
     console.log('🌐 전체 변환 모드: ' + htmlFiles.length + '개 파일');
   }
-
 
   const browser = await puppeteer.launch({
     headless: 'new',
@@ -117,7 +114,8 @@ async function convertAll() {
     try {
       var html = fs.readFileSync(file, 'utf-8');
       var hasSlices = html.includes('data-slice=');
-      var generatedAssets = [];  // { type: 'png'|'gif', path, order, sliceNum }
+      var generatedAssets = [];
+      var orderNum = 0;
 
       var fullHtml = wrapHtml(html);
       var page = await browser.newPage();
@@ -125,9 +123,7 @@ async function convertAll() {
       await page.setContent(fullHtml, { waitUntil: 'networkidle0', timeout: 30000 });
 
       // 폰트 로딩 대기
-      await page.evaluate(function() {
-        return document.fonts.ready;
-      });
+      await page.evaluate(function() { return document.fonts.ready; });
       await new Promise(function(r) { setTimeout(r, 2000); });
 
       var bodyHeight = await page.evaluate(function() { return document.body.scrollHeight; });
@@ -135,65 +131,130 @@ async function convertAll() {
 
       if (hasSlices) {
         var slices = await page.$$('[data-slice]');
-        var orderNum = 0;
 
         for (var s = 0; s < slices.length; s++) {
           var sliceNum = await page.evaluate(function(el) { return el.getAttribute('data-slice'); }, slices[s]);
           var sliceHtml = await page.evaluate(function(el) { return el.innerHTML; }, slices[s]);
-
-          // GIF URL 감지
           var gifUrls = extractGifUrls(sliceHtml);
 
-          // 항상 PNG 캡쳐 (GIF 포함 슬라이스도 정적 fallback으로)
-          orderNum++;
-          var pngPath = file.replace('.html', '_' + sliceNum + '.png');
-          await slices[s].screenshot({ path: pngPath, type: 'png', omitBackground: false });
+          if (gifUrls.length === 0) {
+            // ── 정적 슬라이스: 그대로 PNG ──
+            orderNum++;
+            var pngPath = file.replace('.html', '_' + sliceNum + '.png');
+            await slices[s].screenshot({ path: pngPath, type: 'png', omitBackground: false });
+            console.log('  ✅ slice ' + sliceNum + ' → PNG');
+            generatedAssets.push({ type: 'png', path: pngPath, order: orderNum, sliceNum: sliceNum });
 
-          if (gifUrls.length > 0) {
-            console.log('  📸 ' + path.basename(file) + ' → slice ' + sliceNum + '.png (⚠️ GIF 포함 - 정적 fallback)');
           } else {
-            console.log('  ✅ ' + path.basename(file) + ' → slice ' + sliceNum + '.png');
-          }
+            // ── GIF 포함 슬라이스: 분할 캡쳐 ──
+            console.log('  🎞️ slice ' + sliceNum + ' → GIF 분할 처리 (' + gifUrls.length + '개 GIF)');
 
-          generatedAssets.push({
-            type: 'png',
-            path: pngPath,
-            order: orderNum,
-            sliceNum: sliceNum,
-            hasGif: gifUrls.length > 0
-          });
+            // 슬라이스의 절대 좌표
+            var sliceBox = await slices[s].boundingBox();
 
-          // GIF가 있으면 다운로드
-          for (var g = 0; g < gifUrls.length; g++) {
-            var gifUrl = gifUrls[g];
-            var gifFilename = path.basename(file, '.html') + '_' + sliceNum + '_gif' + (g + 1) + '.gif';
-            var gifPath = path.join(path.dirname(file), gifFilename);
-
-            try {
-              await downloadFile(gifUrl, gifPath);
-              orderNum++;
-              generatedAssets.push({
-                type: 'gif',
-                path: gifPath,
-                order: orderNum,
-                sliceNum: sliceNum,
-                sourceUrl: gifUrl
+            // 모든 GIF img 요소의 좌표 수집
+            var gifBoxes = await page.evaluate(function(sliceEl) {
+              var imgs = sliceEl.querySelectorAll('img');
+              var boxes = [];
+              imgs.forEach(function(img) {
+                if (img.src && img.src.match(/\.gif(\?|$)/i)) {
+                  var rect = img.getBoundingClientRect();
+                  boxes.push({
+                    src: img.src,
+                    top: rect.top,
+                    bottom: rect.bottom,
+                    height: rect.height,
+                    width: rect.width
+                  });
+                }
               });
-              console.log('  🎞️ ' + path.basename(file) + ' → slice ' + sliceNum + ' GIF 다운로드: ' + gifFilename);
-            } catch (gifErr) {
-              console.error('  ⚠️ GIF 다운로드 실패: ' + gifUrl + ' → ' + gifErr.message);
+              // top 기준으로 정렬
+              boxes.sort(function(a, b) { return a.top - b.top; });
+              return boxes;
+            }, slices[s]);
+
+            // 분할 영역 계산
+            var currentY = sliceBox.y;
+            var sliceBottom = sliceBox.y + sliceBox.height;
+            var subPartNum = 0;
+
+            for (var g = 0; g < gifBoxes.length; g++) {
+              var gifBox = gifBoxes[g];
+
+              // ── PART A: GIF 위쪽 영역 → PNG ──
+              var aboveHeight = gifBox.top - currentY;
+              if (aboveHeight > 5) {  // 최소 5px 이상이면 캡쳐
+                orderNum++;
+                subPartNum++;
+                var abovePng = file.replace('.html', '_' + sliceNum + '_' + subPartNum + '.png');
+                await page.screenshot({
+                  path: abovePng,
+                  type: 'png',
+                  clip: {
+                    x: sliceBox.x,
+                    y: currentY,
+                    width: sliceBox.width,
+                    height: aboveHeight
+                  }
+                });
+                console.log('    📸 slice ' + sliceNum + '_' + subPartNum + '.png (GIF 위 영역)');
+                generatedAssets.push({ type: 'png', path: abovePng, order: orderNum, sliceNum: sliceNum + '_' + subPartNum });
+              }
+
+              // ── PART B: GIF 다운로드 ──
+              orderNum++;
+              subPartNum++;
+              var gifFilename = path.basename(file, '.html') + '_' + sliceNum + '_' + subPartNum + '.gif';
+              var gifPath = path.join(path.dirname(file), gifFilename);
+              try {
+                await downloadFile(gifBox.src, gifPath);
+                console.log('    🎞️ slice ' + sliceNum + '_' + subPartNum + '.gif (GIF 원본)');
+                generatedAssets.push({
+                  type: 'gif',
+                  path: gifPath,
+                  order: orderNum,
+                  sliceNum: sliceNum + '_' + subPartNum,
+                  sourceUrl: gifBox.src
+                });
+              } catch (gifErr) {
+                console.error('    ⚠️ GIF 다운로드 실패: ' + gifErr.message);
+              }
+
+              currentY = gifBox.bottom;
+            }
+
+            // ── PART C: 마지막 GIF 아래쪽 영역 → PNG ──
+            var belowHeight = sliceBottom - currentY;
+            if (belowHeight > 5) {
+              orderNum++;
+              subPartNum++;
+              var belowPng = file.replace('.html', '_' + sliceNum + '_' + subPartNum + '.png');
+              await page.screenshot({
+                path: belowPng,
+                type: 'png',
+                clip: {
+                  x: sliceBox.x,
+                  y: currentY,
+                  width: sliceBox.width,
+                  height: belowHeight
+                }
+              });
+              console.log('    📸 slice ' + sliceNum + '_' + subPartNum + '.png (GIF 아래 영역)');
+              generatedAssets.push({ type: 'png', path: belowPng, order: orderNum, sliceNum: sliceNum + '_' + subPartNum });
             }
           }
         }
       } else {
+        // data-slice 없는 파일: 전체 캡쳐
+        orderNum++;
         var pngPath = file.replace('.html', '.png');
         var el = await page.$('section') || await page.$('body');
         await el.screenshot({ path: pngPath, type: 'png', omitBackground: false });
         console.log('  ✅ ' + path.basename(file) + ' → .png');
-        generatedAssets.push({ type: 'png', path: pngPath, order: 1, sliceNum: '1' });
+        generatedAssets.push({ type: 'png', path: pngPath, order: orderNum, sliceNum: '1' });
       }
 
-      // ── 매니페스트 생성 (에셋 업로드 순서표) ──
+      // ── 매니페스트 생성 ──
       if (generatedAssets.length > 0) {
         var manifestPath = file.replace('.html', '_manifest.json');
         var manifest = {
@@ -206,7 +267,6 @@ async function convertAll() {
               type: a.type,
               filename: path.basename(a.path),
               sliceNum: a.sliceNum,
-              hasGif: a.hasGif || false,
               sourceUrl: a.sourceUrl || null
             };
           })
@@ -214,22 +274,17 @@ async function convertAll() {
         fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
         console.log('  📋 매니페스트: ' + path.basename(manifestPath));
 
-        // GIF가 포함된 경우 업로드 가이드 출력
-        var gifAssets = generatedAssets.filter(function(a) { return a.type === 'gif'; });
-        if (gifAssets.length > 0) {
-          console.log('  ──────────────────────────────────────');
-          console.log('  📌 아임웹 업로드 순서 (' + path.basename(file) + '):');
-          generatedAssets.forEach(function(a) {
-            if (a.type === 'png' && a.hasGif) {
-              console.log('    ' + a.order + '. ⏭️  SKIP (GIF로 대체) → ' + path.basename(a.path));
-            } else if (a.type === 'gif') {
-              console.log('    ' + a.order + '. 🎞️  GIF 업로드 → ' + path.basename(a.path));
-            } else {
-              console.log('    ' + a.order + '. 🖼️  PNG 업로드 → ' + path.basename(a.path));
-            }
-          });
-          console.log('  ──────────────────────────────────────');
-        }
+        // 업로드 가이드 출력
+        console.log('  ──────────────────────────────────────');
+        console.log('  📌 아임웹 업로드 순서 (' + path.basename(file) + '):');
+        generatedAssets.forEach(function(a) {
+          if (a.type === 'gif') {
+            console.log('    ' + a.order + '. 🎞️  GIF → ' + path.basename(a.path));
+          } else {
+            console.log('    ' + a.order + '. 🖼️  PNG → ' + path.basename(a.path));
+          }
+        });
+        console.log('  ──────────────────────────────────────');
       }
 
       await page.close();
