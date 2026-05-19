@@ -1,6 +1,8 @@
-﻿const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
+const https = require('https');
+const http = require('http');
 
 function findHtmlFiles(dir, result) {
   if (!fs.existsSync(dir)) return;
@@ -30,6 +32,37 @@ function wrapHtml(html) {
     '</head><body>' + html + '</body></html>';
 }
 
+// ── GIF 다운로드 함수 ──
+function downloadFile(url, destPath) {
+  return new Promise(function(resolve, reject) {
+    var mod = url.startsWith('https') ? https : http;
+    mod.get(url, function(response) {
+      // 리다이렉트 처리
+      if (response.statusCode === 301 || response.statusCode === 302) {
+        return downloadFile(response.headers.location, destPath).then(resolve).catch(reject);
+      }
+      if (response.statusCode !== 200) {
+        return reject(new Error('HTTP ' + response.statusCode + ' for ' + url));
+      }
+      var fileStream = fs.createWriteStream(destPath);
+      response.pipe(fileStream);
+      fileStream.on('finish', function() { fileStream.close(resolve); });
+      fileStream.on('error', reject);
+    }).on('error', reject);
+  });
+}
+
+// ── 슬라이스 HTML에서 GIF URL 추출 ──
+function extractGifUrls(sliceHtml) {
+  var gifUrls = [];
+  var regex = /src=["']([^"']*\.gif)["']/gi;
+  var match;
+  while ((match = regex.exec(sliceHtml)) !== null) {
+    gifUrls.push(match[1]);
+  }
+  return gifUrls;
+}
+
 async function convertAll() {
   const rootDir = path.join(__dirname, '..');
   const perfDir = path.join(rootDir, 'performances');
@@ -45,11 +78,11 @@ async function convertAll() {
       var abs = path.join(rootDir, relPath);
       if (fs.existsSync(abs)) {
         htmlFiles.push(abs);
-        // 기존 PNG만 삭제 (해당 파일 기준)
+        // 기존 PNG/GIF 삭제 (해당 파일 기준)
         var dir = path.dirname(abs);
         var base = path.basename(abs, '.html');
         fs.readdirSync(dir).forEach(function(f) {
-          if (f.startsWith(base) && f.endsWith('.png')) {
+          if (f.startsWith(base) && (f.endsWith('.png') || f.match(/_\d+_gif\d+\.gif$/))) {
             fs.unlinkSync(path.join(dir, f));
             console.log('🗑️ 삭제: ' + f);
           }
@@ -84,7 +117,7 @@ async function convertAll() {
     try {
       var html = fs.readFileSync(file, 'utf-8');
       var hasSlices = html.includes('data-slice=');
-      var generatedPngs = [];
+      var generatedAssets = [];  // { type: 'png'|'gif', path, order, sliceNum }
 
       var fullHtml = wrapHtml(html);
       var page = await browser.newPage();
@@ -102,19 +135,101 @@ async function convertAll() {
 
       if (hasSlices) {
         var slices = await page.$$('[data-slice]');
+        var orderNum = 0;
+
         for (var s = 0; s < slices.length; s++) {
           var sliceNum = await page.evaluate(function(el) { return el.getAttribute('data-slice'); }, slices[s]);
+          var sliceHtml = await page.evaluate(function(el) { return el.innerHTML; }, slices[s]);
+
+          // GIF URL 감지
+          var gifUrls = extractGifUrls(sliceHtml);
+
+          // 항상 PNG 캡쳐 (GIF 포함 슬라이스도 정적 fallback으로)
+          orderNum++;
           var pngPath = file.replace('.html', '_' + sliceNum + '.png');
           await slices[s].screenshot({ path: pngPath, type: 'png', omitBackground: false });
-          console.log('  ✅ ' + path.basename(file) + ' → slice ' + sliceNum + '.png');
-          generatedPngs.push(pngPath);
+
+          if (gifUrls.length > 0) {
+            console.log('  📸 ' + path.basename(file) + ' → slice ' + sliceNum + '.png (⚠️ GIF 포함 - 정적 fallback)');
+          } else {
+            console.log('  ✅ ' + path.basename(file) + ' → slice ' + sliceNum + '.png');
+          }
+
+          generatedAssets.push({
+            type: 'png',
+            path: pngPath,
+            order: orderNum,
+            sliceNum: sliceNum,
+            hasGif: gifUrls.length > 0
+          });
+
+          // GIF가 있으면 다운로드
+          for (var g = 0; g < gifUrls.length; g++) {
+            var gifUrl = gifUrls[g];
+            var gifFilename = path.basename(file, '.html') + '_' + sliceNum + '_gif' + (g + 1) + '.gif';
+            var gifPath = path.join(path.dirname(file), gifFilename);
+
+            try {
+              await downloadFile(gifUrl, gifPath);
+              orderNum++;
+              generatedAssets.push({
+                type: 'gif',
+                path: gifPath,
+                order: orderNum,
+                sliceNum: sliceNum,
+                sourceUrl: gifUrl
+              });
+              console.log('  🎞️ ' + path.basename(file) + ' → slice ' + sliceNum + ' GIF 다운로드: ' + gifFilename);
+            } catch (gifErr) {
+              console.error('  ⚠️ GIF 다운로드 실패: ' + gifUrl + ' → ' + gifErr.message);
+            }
+          }
         }
       } else {
         var pngPath = file.replace('.html', '.png');
         var el = await page.$('section') || await page.$('body');
         await el.screenshot({ path: pngPath, type: 'png', omitBackground: false });
         console.log('  ✅ ' + path.basename(file) + ' → .png');
-        generatedPngs.push(pngPath);
+        generatedAssets.push({ type: 'png', path: pngPath, order: 1, sliceNum: '1' });
+      }
+
+      // ── 매니페스트 생성 (에셋 업로드 순서표) ──
+      if (generatedAssets.length > 0) {
+        var manifestPath = file.replace('.html', '_manifest.json');
+        var manifest = {
+          source: path.basename(file),
+          generated: new Date().toISOString(),
+          totalAssets: generatedAssets.length,
+          assets: generatedAssets.map(function(a) {
+            return {
+              order: a.order,
+              type: a.type,
+              filename: path.basename(a.path),
+              sliceNum: a.sliceNum,
+              hasGif: a.hasGif || false,
+              sourceUrl: a.sourceUrl || null
+            };
+          })
+        };
+        fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
+        console.log('  📋 매니페스트: ' + path.basename(manifestPath));
+
+        // GIF가 포함된 경우 업로드 가이드 출력
+        var gifAssets = generatedAssets.filter(function(a) { return a.type === 'gif'; });
+        if (gifAssets.length > 0) {
+          console.log('  ──────────────────────────────────────');
+          console.log('  📌 아임웹 업로드 순서 (' + path.basename(file) + '):');
+          generatedAssets.forEach(function(a) {
+            if (a.type === 'png' && a.hasGif) {
+              console.log('    ' + a.order + '. ⏭️  SKIP (GIF로 대체) → ' + path.basename(a.path));
+            } else if (a.type === 'gif') {
+              console.log('    ' + a.order + '. 🎞️  GIF 업로드 → ' + path.basename(a.path));
+            } else {
+              console.log('    ' + a.order + '. 🖼️  PNG 업로드 → ' + path.basename(a.path));
+            }
+          });
+          console.log('  ──────────────────────────────────────');
+        }
       }
 
       await page.close();
