@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer');
+﻿const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 
@@ -18,14 +18,14 @@ function wrapHtml(html) {
   return '<!DOCTYPE html>' +
     '<html><head>' +
     '<meta charset="UTF-8">' +
-    '<meta name="viewport" content="width=850">' +
+    '<meta name="viewport" content="width=860">' +
     '<link rel="preconnect" href="https://fonts.googleapis.com">' +
     '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' +
     '<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Noto+Sans+JP:wght@400;700;900&family=Noto+Sans+SC:wght@400;700;900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">' +
     '<style>' +
     '* { margin:0; padding:0; box-sizing:border-box;' +
     '    font-family: "Noto Sans KR","Noto Sans JP","Noto Sans SC","Inter","Noto Color Emoji","Noto Sans CJK KR","Noto Sans CJK JP","Noto Sans CJK SC", sans-serif !important; }' +
-    'body { background:white; width:850px; }' +
+    'body { background:white; width:860px; }' +
     '</style>' +
     '</head><body>' + html + '</body></html>';
 }
@@ -88,7 +88,7 @@ async function convertAll() {
 
       var fullHtml = wrapHtml(html);
       var page = await browser.newPage();
-      await page.setViewport({ width: 850, height: 1, deviceScaleFactor: 2 });
+      await page.setViewport({ width: 860, height: 1, deviceScaleFactor: 2 });
       await page.setContent(fullHtml, { waitUntil: 'networkidle0', timeout: 30000 });
 
       // 폰트 로딩 대기
@@ -98,7 +98,7 @@ async function convertAll() {
       await new Promise(function(r) { setTimeout(r, 2000); });
 
       var bodyHeight = await page.evaluate(function() { return document.body.scrollHeight; });
-      await page.setViewport({ width: 850, height: bodyHeight + 50, deviceScaleFactor: 2 });
+      await page.setViewport({ width: 860, height: bodyHeight + 50, deviceScaleFactor: 2 });
 
       if (hasSlices) {
         var slices = await page.$$('[data-slice]');
