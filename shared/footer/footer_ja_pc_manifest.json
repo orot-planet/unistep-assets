@@ -1,6 +1,6 @@
 {
   "source": "footer_ja_pc.html",
-  "generated": "2026-05-19T02:02:12.587Z",
+  "generated": "2026-05-19T02:48:16.677Z",
   "totalAssets": 1,
   "assets": [
     {
@@ -8,7 +8,6 @@
       "type": "png",
       "filename": "footer_ja_pc.png",
       "sliceNum": "1",
-      "hasGif": false,
       "sourceUrl": null
     }
   ]

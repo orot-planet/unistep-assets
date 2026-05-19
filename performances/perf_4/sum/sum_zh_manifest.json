@@ -1,6 +1,6 @@
 {
   "source": "sum_zh.html",
-  "generated": "2026-05-19T02:01:29.392Z",
+  "generated": "2026-05-19T02:47:33.124Z",
   "totalAssets": 1,
   "assets": [
     {
@@ -8,7 +8,6 @@
       "type": "png",
       "filename": "sum_zh.png",
       "sliceNum": "1",
-      "hasGif": false,
       "sourceUrl": null
     }
   ]

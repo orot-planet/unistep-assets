@@ -1,6 +1,6 @@
 {
   "source": "cast.html",
-  "generated": "2026-05-19T02:01:33.582Z",
+  "generated": "2026-05-19T02:47:37.334Z",
   "totalAssets": 1,
   "assets": [
     {
@@ -8,7 +8,6 @@
       "type": "png",
       "filename": "cast.png",
       "sliceNum": "1",
-      "hasGif": false,
       "sourceUrl": null
     }
   ]

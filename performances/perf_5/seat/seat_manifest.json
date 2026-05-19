@@ -1,6 +1,6 @@
 {
   "source": "seat.html",
-  "generated": "2026-05-19T02:01:51.015Z",
+  "generated": "2026-05-19T02:47:54.963Z",
   "totalAssets": 1,
   "assets": [
     {
@@ -8,7 +8,6 @@
       "type": "png",
       "filename": "seat.png",
       "sliceNum": "1",
-      "hasGif": false,
       "sourceUrl": null
     }
   ]

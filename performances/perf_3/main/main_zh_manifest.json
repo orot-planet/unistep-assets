@@ -1,6 +1,6 @@
 {
   "source": "main_zh.html",
-  "generated": "2026-05-19T02:00:36.623Z",
+  "generated": "2026-05-19T02:46:42.015Z",
   "totalAssets": 3,
   "assets": [
     {
@@ -8,7 +8,6 @@
       "type": "png",
       "filename": "main_zh_1.png",
       "sliceNum": "1",
-      "hasGif": false,
       "sourceUrl": null
     },
     {
@@ -16,7 +15,6 @@
       "type": "png",
       "filename": "main_zh_2.png",
       "sliceNum": "2",
-      "hasGif": false,
       "sourceUrl": null
     },
     {
@@ -24,7 +22,6 @@
       "type": "png",
       "filename": "main_zh_3.png",
       "sliceNum": "3",
-      "hasGif": false,
       "sourceUrl": null
     }
   ]

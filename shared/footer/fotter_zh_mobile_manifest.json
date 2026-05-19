@@ -1,6 +1,6 @@
 {
   "source": "fotter_zh_mobile.html",
-  "generated": "2026-05-19T02:03:06.123Z",
+  "generated": "2026-05-19T02:48:59.699Z",
   "totalAssets": 4,
   "assets": [
     {
@@ -8,7 +8,6 @@
       "type": "png",
       "filename": "fotter_zh_mobile_1.png",
       "sliceNum": "1",
-      "hasGif": false,
       "sourceUrl": null
     },
     {
@@ -16,7 +15,6 @@
       "type": "png",
       "filename": "fotter_zh_mobile_2.png",
       "sliceNum": "2",
-      "hasGif": false,
       "sourceUrl": null
     },
     {
@@ -24,7 +22,6 @@
       "type": "png",
       "filename": "fotter_zh_mobile_3.png",
       "sliceNum": "3",
-      "hasGif": false,
       "sourceUrl": null
     },
     {
@@ -32,7 +29,6 @@
       "type": "png",
       "filename": "fotter_zh_mobile_4.png",
       "sliceNum": "4",
-      "hasGif": false,
       "sourceUrl": null
     }
   ]
