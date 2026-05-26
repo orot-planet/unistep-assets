@@ -1,0 +1,14 @@
+{
+  "source": "cast.html",
+  "generated": "2026-05-26T08:24:36.799Z",
+  "totalAssets": 1,
+  "assets": [
+    {
+      "order": 1,
+      "type": "png",
+      "filename": "cast.png",
+      "sliceNum": "1",
+      "sourceUrl": null
+    }
+  ]
+}

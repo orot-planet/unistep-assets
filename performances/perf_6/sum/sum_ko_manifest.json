@@ -1,0 +1,14 @@
+{
+  "source": "sum_ko.html",
+  "generated": "2026-05-26T08:25:11.504Z",
+  "totalAssets": 1,
+  "assets": [
+    {
+      "order": 1,
+      "type": "png",
+      "filename": "sum_ko.png",
+      "sliceNum": "1",
+      "sourceUrl": null
+    }
+  ]
+}

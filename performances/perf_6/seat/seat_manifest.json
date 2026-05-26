@@ -1,0 +1,14 @@
+{
+  "source": "seat.html",
+  "generated": "2026-05-26T08:24:58.853Z",
+  "totalAssets": 1,
+  "assets": [
+    {
+      "order": 1,
+      "type": "png",
+      "filename": "seat.png",
+      "sliceNum": "1",
+      "sourceUrl": null
+    }
+  ]
+}
