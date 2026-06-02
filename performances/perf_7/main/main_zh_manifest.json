@@ -1,26 +1,26 @@
 {
-  "source": "main_ko.html",
-  "generated": "2026-06-02T06:21:00.944Z",
+  "source": "main_zh.html",
+  "generated": "2026-06-02T06:23:18.570Z",
   "totalAssets": 3,
   "assets": [
     {
       "order": 1,
       "type": "png",
-      "filename": "main_ko_1.png",
+      "filename": "main_zh_1.png",
       "sliceNum": "1",
       "sourceUrl": null
     },
     {
       "order": 2,
       "type": "png",
-      "filename": "main_ko_2.png",
+      "filename": "main_zh_2.png",
       "sliceNum": "2",
       "sourceUrl": null
     },
     {
       "order": 3,
       "type": "png",
-      "filename": "main_ko_3.png",
+      "filename": "main_zh_3.png",
       "sliceNum": "3",
       "sourceUrl": null
     }

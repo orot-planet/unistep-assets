@@ -1,12 +1,12 @@
 {
-  "source": "cast.html",
-  "generated": "2026-06-02T06:22:35.104Z",
+  "source": "seat.html",
+  "generated": "2026-06-02T06:23:22.718Z",
   "totalAssets": 1,
   "assets": [
     {
       "order": 1,
       "type": "png",
-      "filename": "cast.png",
+      "filename": "seat.png",
       "sliceNum": "1",
       "sourceUrl": null
     }
